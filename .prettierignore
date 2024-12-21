@@ -1,0 +1,7 @@
+# https://prettier.io/docs/en/ignore.html
+
+# Dependencies
+node_modules/
+
+# Build output
+build/

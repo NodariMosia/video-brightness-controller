@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Video Brightness Controller</title>
+
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+
+    <body>
+        <div class="controls">
+            <h2>Adjust Brightness</h2>
+            <div class="range">
+                <div class="sliderValue">
+                    <span id="brightnessDisplay">100</span>
+                </div>
+                <div class="field">
+                    <div class="value left">0</div>
+                    <input
+                        id="brightnessInput"
+                        type="range"
+                        min="0"
+                        max="200"
+                        value="100"
+                        step="5"
+                    />
+                    <div class="value right">200</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="misc">
+            <h5>
+                By
+                <a
+                    href="https://github.com/NodariMosia"
+                    target="_blank"
+                    referrerpolicy="no-referrer"
+                >
+                    Nodar Mosia
+                </a>
+            </h5>
+            <button id="reset">Reset</button>
+        </div>
+
+        <script src="popup.js"></script>
+    </body>
+</html>
