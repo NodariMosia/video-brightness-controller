@@ -1,7 +1,7 @@
 # ![Video Brightness Controller Icon](public/icons/icon_32.png) Video Brightness Controller
 
 Chrome extension to tune video brightness from 0% to 200%.
-Useful for night-owls (like me) with annoyingly bright monitors even at 0 brightness level.
+Useful for night-owls (like me) with annoyingly bright monitors even at the lowest brightness level.
 
 ## Features
 
