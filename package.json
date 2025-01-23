@@ -1,7 +1,7 @@
 {
-    "name": "video-brightness-controller",
-    "version": "0.1.0",
-    "description": "Chrome Extension: Video Brightness Controller",
+    "name": "media-brightness-controller",
+    "version": "0.1.1",
+    "description": "Chrome Extension: Media Brightness Controller",
     "private": true,
     "scripts": {
         "watch": "webpack --mode=development --watch --config config/webpack.config.js",
@@ -11,6 +11,7 @@
         "format": "prettier -w --ignore-unknown '{config,public,src}/**/*.{html,css,js,json}'"
     },
     "devDependencies": {
+        "@types/chrome": "^0.0.299",
         "adm-zip": "^0.5.16",
         "copy-webpack-plugin": "^10.2.4",
         "css-loader": "^6.11.0",

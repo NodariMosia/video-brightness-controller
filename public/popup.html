@@ -1,25 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>Video Brightness Controller</title>
+        <title>Media Brightness Controller</title>
 
         <link rel="stylesheet" href="popup.css" />
     </head>
 
     <body>
         <div class="controls">
-            <h2>Adjust Brightness</h2>
-            <div class="range">
-                <div class="sliderValue">
-                    <span id="brightnessDisplay">100</span>
+            <p class="control-group-label">Video Brightness</p>
+            <div class="control-group">
+                <div class="control-group__display">
+                    <span id="videoBrightnessDisplay">100</span>
                 </div>
-                <div class="field">
+                <div class="control-group__field">
                     <div class="value left">0</div>
                     <input
-                        id="brightnessInput"
+                        id="videoBrightnessInput"
+                        type="range"
+                        min="0"
+                        max="200"
+                        value="100"
+                        step="5"
+                    />
+                    <div class="value right">200</div>
+                </div>
+            </div>
+
+            <p class="control-group-label">Image Brightness</p>
+            <div class="control-group">
+                <div class="control-group__display">
+                    <span id="imgBrightnessDisplay">100</span>
+                </div>
+                <div class="control-group__field">
+                    <div class="value left">0</div>
+                    <input
+                        id="imgBrightnessInput"
                         type="range"
                         min="0"
                         max="200"
@@ -31,8 +50,8 @@
             </div>
         </div>
 
-        <div class="misc">
-            <h5>
+        <footer class="footer">
+            <p class="footer__author">
                 By
                 <a
                     href="https://github.com/NodariMosia"
@@ -41,9 +60,9 @@
                 >
                     Nodar Mosia
                 </a>
-            </h5>
-            <button id="reset">Reset</button>
-        </div>
+            </p>
+            <button class="footer__button" id="resetButton" type="button">Reset</button>
+        </footer>
 
         <script src="popup.js"></script>
     </body>

@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Video Brightness Controller",
+    "name": "Media Brightness Controller",
     "$schema": "https://json.schemastore.org/chrome-manifest.json",
-    "version": "0.1.0",
-    "description": "Tune video brightness from 0% to 200%. Useful for night-owls (like me) with annoyingly bright monitors even at the lowest level.",
+    "version": "0.1.1",
+    "description": "Tune video or image brightness from 0% to 200%. Useful for night-owls with annoyingly bright monitors even at the lowest level.",
     "icons": {
         "16": "icons/icon_16.png",
         "32": "icons/icon_32.png",
@@ -11,7 +11,7 @@
         "128": "icons/icon_128.png"
     },
     "action": {
-        "default_title": "Video Brightness Controller",
+        "default_title": "Media Brightness Controller",
         "default_popup": "popup.html"
     },
     "permissions": ["storage"],

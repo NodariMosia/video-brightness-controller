@@ -1,21 +1,47 @@
 "use strict";
 
-let brightness = 100;
+/** @type {BrightnessControllerSettings} */
+const settingsCache = {
+    video: 100,
+    img: 100,
+};
 
-function updateVideoBrightness(newBrightness) {
-    if (typeof newBrightness === "number" && !isNaN(newBrightness) && newBrightness != brightness) {
-        brightness = newBrightness;
+chrome.storage.sync.get(["settings"], (result) => {
+    updateSupportedMediaBrightnesses(result.settings);
+});
 
-        document.querySelectorAll("video").forEach((video) => {
+chrome.storage.onChanged.addListener((changes) => {
+    updateSupportedMediaBrightnesses(changes.settings?.newValue);
+});
+
+/**
+ * @param {BrightnessControllerSettings | undefined} newSettings
+ */
+function updateSupportedMediaBrightnesses(newSettings) {
+    if (!newSettings) {
+        return;
+    }
+
+    for (const key in newSettings) {
+        if (!Object.prototype.hasOwnProperty.call(settingsCache, key)) {
+            continue;
+        }
+
+        const mediaTag = /** @type {SupportedMediaTag} */ (key);
+        const brightness = newSettings[mediaTag];
+
+        if (typeof brightness !== "number" || isNaN(brightness)) {
+            continue;
+        }
+
+        if (brightness == settingsCache[mediaTag]) {
+            continue;
+        }
+
+        settingsCache[mediaTag] = brightness;
+
+        document.querySelectorAll(mediaTag).forEach((video) => {
             video.style.filter = `brightness(${brightness}%)`;
         });
     }
 }
-
-chrome.storage.sync.get(["brightness"], (result) => {
-    updateVideoBrightness(result.brightness);
-});
-
-chrome.storage.onChanged.addListener((changes, area) => {
-    updateVideoBrightness(changes.brightness.newValue);
-});

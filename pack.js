@@ -1,3 +1,5 @@
+"use strict";
+
 const { readFileSync, existsSync, mkdirSync } = require("fs");
 const { parse, resolve } = require("path");
 const AdmZip = require("adm-zip");

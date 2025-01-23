@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "target": "ES6",
+        "module": "CommonJS",
+
+        "typeRoots": ["./types"],
+
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noUncheckedIndexedAccess": true
+    },
+    "exclude": ["node_modules"]
+}
