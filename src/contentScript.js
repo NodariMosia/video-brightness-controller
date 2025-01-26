@@ -6,6 +6,9 @@ const settingsCache = {
     img: 100,
 };
 
+/** @type {HTMLStyleElement | undefined} */
+let styleElement;
+
 chrome.storage.sync.get(["settings"], (result) => {
     updateSupportedMediaBrightnesses(result.settings);
 });
@@ -23,7 +26,6 @@ function updateSupportedMediaBrightnesses(newSettings) {
     }
 
     let hasChanges = false;
-    let newStyles = "";
 
     for (const key in newSettings) {
         if (!Object.prototype.hasOwnProperty.call(settingsCache, key)) {
@@ -43,28 +45,29 @@ function updateSupportedMediaBrightnesses(newSettings) {
 
         hasChanges = true;
         settingsCache[mediaTag] = brightness;
-
-        newStyles += newStyles ? " " : "";
-        newStyles += `${mediaTag} {filter: brightness(${brightness}%)}`;
     }
 
-    if (hasChanges) {
-        updateStyleTagInDocumentHead(newStyles);
+    if (!hasChanges) {
+        return;
     }
+
+    const newStyles = Object.entries(settingsCache)
+        .map(([elementTag, brightness]) => `${elementTag} {filter:brightness(${brightness}%)}`)
+        .join(" ");
+
+    updateStyleTagInDocumentHead(newStyles);
 }
 
 /**
  * @param {string} newStyles
  */
 function updateStyleTagInDocumentHead(newStyles) {
-    const styleTag = document.getElementById("media-brightness-controller-style");
-
-    if (!styleTag) {
-        const style = document.createElement("style");
-        style.id = "media-brightness-controller-style";
-        style.textContent = newStyles;
-        document.head.appendChild(style);
+    if (!styleElement) {
+        styleElement = document.createElement("style");
+        styleElement.id = "media-brightness-controller-style";
+        styleElement.textContent = newStyles;
+        document.head.prepend(styleElement);
     } else {
-        styleTag.textContent = newStyles;
+        styleElement.textContent = newStyles;
     }
 }
