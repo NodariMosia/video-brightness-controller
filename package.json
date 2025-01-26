@@ -1,6 +1,6 @@
 {
     "name": "media-brightness-controller",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Chrome Extension: Media Brightness Controller",
     "private": true,
     "engines": {

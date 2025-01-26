@@ -22,6 +22,9 @@ function updateSupportedMediaBrightnesses(newSettings) {
         return;
     }
 
+    let hasChanges = false;
+    let newStyles = "";
+
     for (const key in newSettings) {
         if (!Object.prototype.hasOwnProperty.call(settingsCache, key)) {
             continue;
@@ -38,10 +41,30 @@ function updateSupportedMediaBrightnesses(newSettings) {
             continue;
         }
 
+        hasChanges = true;
         settingsCache[mediaTag] = brightness;
 
-        document.querySelectorAll(mediaTag).forEach((video) => {
-            video.style.filter = `brightness(${brightness}%)`;
-        });
+        newStyles += newStyles ? " " : "";
+        newStyles += `${mediaTag} {filter: brightness(${brightness}%)}`;
+    }
+
+    if (hasChanges) {
+        updateStyleTagInDocumentHead(newStyles);
+    }
+}
+
+/**
+ * @param {string} newStyles
+ */
+function updateStyleTagInDocumentHead(newStyles) {
+    const styleTag = document.getElementById("media-brightness-controller-style");
+
+    if (!styleTag) {
+        const style = document.createElement("style");
+        style.id = "media-brightness-controller-style";
+        style.textContent = newStyles;
+        document.head.appendChild(style);
+    } else {
+        styleTag.textContent = newStyles;
     }
 }
