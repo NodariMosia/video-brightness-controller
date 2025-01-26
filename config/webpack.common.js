@@ -5,18 +5,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const PATHS = require("./paths");
 
-// used in the module rules and in the stats exclude list
 const IMAGE_TYPES = /\.(png|jpe?g|gif|svg)$/i;
 
-// To re-use webpack configuration across templates,
-// CLI maintains a common webpack configuration file - `webpack.common.js`.
-// Whenever user creates an extension, CLI adds `webpack.common.js` file
-// in template's `config` folder
+/** @type { import('webpack').Configuration } */
 const common = {
     output: {
-        // the build folder to output bundles and assets in.
         path: PATHS.build,
-        // the filename template for entry chunks
         filename: "[name].js",
     },
     stats: {
@@ -33,7 +27,7 @@ const common = {
                 test: /\.css$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
-            // Check for images imported in .js files and
+            // Check for images imported in .js files and load them
             {
                 test: IMAGE_TYPES,
                 use: [
