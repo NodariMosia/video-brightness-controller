@@ -13,10 +13,7 @@ declare global {
         input: HTMLInputElement;
         display: HTMLElement;
         mediaTag: SupportedMediaTag;
-        updateMediaBrightness: (
-            /** @type {number} */ brightness: number,
-            /** @type {boolean} */ setInputValue: boolean
-        ) => void;
+        updateMediaBrightness: (brightness: number, setInputValue: boolean) => void;
     };
 }
 
