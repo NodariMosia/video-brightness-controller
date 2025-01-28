@@ -5,8 +5,11 @@ Useful for night-owls (like me) with annoyingly bright monitors even at the lowe
 
 ## Features
 
-- Easily adjust video or image brightness on all sites;
-- That's it, pretty simple.
+- Control video or image brightness on current tab from extension popup (from 0% up to 200%).
+- Control video and image brightness on current tab using following keyboard shortcuts:
+  - Increase all brightness by 5% (up to maximum of 200%). Default shortcut: Alt+Shift+Up
+  - Decrease all brightness by 5% (minimum of 0%). Default shortcut: Alt+Shift+Down
+  - Reset all brightness to default (100%). Default shortcut: Alt+Shift+R
 
 ## Install
 
