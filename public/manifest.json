@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Media Brightness Controller",
     "$schema": "https://json.schemastore.org/chrome-manifest.json",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "Tune video or image brightness from 0% to 200%. Useful for night-owls with annoyingly bright monitors even at the lowest level.",
     "icons": {
         "16": "icons/icon_16.png",
@@ -27,5 +27,23 @@
                 "https://meet.google.com/*"
             ]
         }
-    ]
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "commands": {
+        "increase-all-brightness": {
+            "suggested_key": { "default": "Alt+Shift+Up" },
+            "description": "Increase all media brightness by 5%"
+        },
+        "decrease-all-brightness": {
+            "suggested_key": { "default": "Alt+Shift+Down" },
+            "description": "Decrease all media brightness by 5%"
+        },
+        "reset-all-brightness": {
+            "suggested_key": { "default": "Alt+Shift+R" },
+            "description": "Reset all media brightness to 100%"
+        }
+    }
 }

@@ -1,9 +1,12 @@
 "use strict";
 
+const DEFAULT_BRIGHTNESS_VALUE = 100;
+const BRIGHTNESS_VALUE_STEP = 5;
+
 /** @type {BrightnessControllerSettings} */
 const settingsCache = {
-    video: 100,
-    img: 100,
+    video: DEFAULT_BRIGHTNESS_VALUE,
+    img: DEFAULT_BRIGHTNESS_VALUE,
 };
 
 /** @type {HTMLStyleElement | undefined} */
@@ -71,3 +74,22 @@ function updateStyleTagInDocumentHead(newStyles) {
         styleElement.textContent = newStyles;
     }
 }
+
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    const newSettings = { ...settingsCache };
+
+    if (message === "increase-all-brightness") {
+        newSettings.video = Math.min(200, newSettings.video + BRIGHTNESS_VALUE_STEP);
+        newSettings.img = Math.min(200, newSettings.img + BRIGHTNESS_VALUE_STEP);
+    } else if (message === "decrease-all-brightness") {
+        newSettings.video = Math.max(0, newSettings.video - BRIGHTNESS_VALUE_STEP);
+        newSettings.img = Math.max(0, newSettings.img - BRIGHTNESS_VALUE_STEP);
+    } else if (message === "reset-all-brightness") {
+        newSettings.video = DEFAULT_BRIGHTNESS_VALUE;
+        newSettings.img = DEFAULT_BRIGHTNESS_VALUE;
+    }
+
+    chrome.storage.sync.set({ settings: newSettings });
+
+    sendResponse({});
+});
