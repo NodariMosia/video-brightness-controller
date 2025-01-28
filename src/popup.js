@@ -26,7 +26,7 @@ function load() {
         createMediaBrightnessController("img"),
     ].filter((controller) => !!controller);
 
-    chrome.storage.sync.get(["settings"], (result) => {
+    chrome.storage.local.get(["settings"], (result) => {
         controllers.forEach((controller) => {
             const initialValue = result.settings?.[controller.mediaTag] ?? DEFAULT_BRIGHTNESS_VALUE;
 
@@ -72,7 +72,7 @@ function createMediaBrightnessController(mediaTag) {
     const updateMediaBrightness = (brightness, setInputValue) => {
         settings[mediaTag] = brightness;
 
-        chrome.storage.sync.set({ settings });
+        chrome.storage.local.set({ settings });
 
         if (setInputValue) input.valueAsNumber = brightness;
 

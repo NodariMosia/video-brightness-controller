@@ -12,7 +12,7 @@ const settingsCache = {
 /** @type {HTMLStyleElement | undefined} */
 let styleElement;
 
-chrome.storage.sync.get(["settings"], (result) => {
+chrome.storage.local.get(["settings"], (result) => {
     updateSupportedMediaBrightnesses(result.settings);
 });
 
@@ -89,7 +89,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         newSettings.img = DEFAULT_BRIGHTNESS_VALUE;
     }
 
-    chrome.storage.sync.set({ settings: newSettings });
+    chrome.storage.local.set({ settings: newSettings });
 
     sendResponse({});
 });
