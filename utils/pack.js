@@ -1,23 +1,25 @@
 "use strict";
 
 const { readFileSync, existsSync, mkdirSync } = require("fs");
-const { parse, resolve } = require("path");
+const path = require("path");
 const AdmZip = require("adm-zip");
 
 try {
-    const { base } = parse(__dirname);
-    const { version } = JSON.parse(
-        readFileSync(resolve(__dirname, "build", "manifest.json"), "utf8")
+    const projectRoot = path.resolve(__dirname, "..");
+
+    const { name, version } = JSON.parse(
+        readFileSync(path.join(projectRoot, "package.json"), "utf8")
     );
 
-    const outdir = "release";
-    const filename = `${base}-v${version}.zip`;
+    const outdir = path.join(projectRoot, "release");
+    const filename = `${name}-v${version}.zip`;
+
     const zip = new AdmZip();
-    zip.addLocalFolder("build");
+    zip.addLocalFolder(path.join(projectRoot, "build"));
     if (!existsSync(outdir)) {
         mkdirSync(outdir);
     }
-    zip.writeZip(`${outdir}/${filename}`);
+    zip.writeZip(path.join(outdir, filename));
 
     console.log(
         `Success! Created a ${filename} file under ${outdir} directory. You can upload this file to web store.`

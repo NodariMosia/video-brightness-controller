@@ -10,7 +10,8 @@
     "scripts": {
         "watch": "webpack --mode=development --watch --config config/webpack.config.js",
         "build": "webpack --mode=production --config config/webpack.config.js",
-        "pack": "node pack.js",
+        "bump": "node utils/bumpVersion.js",
+        "pack": "node utils/pack.js",
         "repack": "npm run build && npm run pack",
         "format": "prettier -w --ignore-unknown '{config,public,src,types,utils}/**/*.{html,css,js,ts,json,jsonc}'"
     },
