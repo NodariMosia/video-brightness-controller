@@ -2,56 +2,100 @@
 
 const fs = require("fs");
 const path = require("path");
+const prettier = require("prettier");
 
-// 1. Read new version from command line arguments
+/**
+ * @typedef {{ [key: string]: string | ObjectParserUtilOptions }} ObjectParserUtilOptions
+ */
 
-const newVersion = process.argv[2];
+const version = getVersionFromCLIArgs();
 
-if (!newVersion) {
-    console.error("Error! New version is not provided.");
-    process.exit(1);
+const root = path.resolve(__dirname, "..");
+
+const manifestPath = path.join(root, "public", "manifest.json");
+const packageJsonPath = path.join(root, "package.json");
+const packageLockJsonPath = path.join(root, "package-lock.json");
+
+const prettierConfigPath = path.join(root, ".prettierrc");
+
+/** @type {[string, ObjectParserUtilOptions][]} */
+const filesToUpdate = [
+    [manifestPath, { version }],
+    [packageJsonPath, { version }],
+    [packageLockJsonPath, { version, packages: { "": { version } } }],
+];
+
+updateVersions();
+
+/***************************
+ **** Utility functions ****
+ ***************************/
+
+function getVersionFromCLIArgs() {
+    console.log(process.argv);
+    const version = process.argv[2];
+
+    if (!version) {
+        console.error("Error! New version is not provided.");
+        process.exit(1);
+    }
+
+    if (!/^\d+\.\d+\.\d+$/.test(version)) {
+        console.error("Error! Invalid new version format. Correct format: x.x.x");
+        process.exit(1);
+    }
+
+    return version;
 }
 
-// 2. Validate new version
+async function updateVersions() {
+    try {
+        const prettierConfig = await getPrettierConfig();
 
-if (!/^\d+\.\d+\.\d+$/.test(newVersion)) {
-    console.error("Error! Invalid new version.");
-    process.exit(1);
+        await Promise.all(
+            filesToUpdate.map(([filePath, options]) => {
+                return updateVersionInJsonFile(filePath, prettierConfig, options);
+            })
+        );
+
+        console.log(`Success! Updated version to ${version}.`);
+        process.exit(0);
+    } catch (error) {
+        console.error(`Failed to update version. ${error}`);
+        process.exit(1);
+    }
 }
 
-// 3. Update version in package.json, package-lock.json and public/manifest.json
+async function getPrettierConfig() {
+    const prettierConfig = await prettier.resolveConfig(prettierConfigPath);
 
-const projectRoot = path.resolve(__dirname, "..");
+    if (!prettierConfig) {
+        throw new Error(`Couldn't find prettier config at ${prettierConfigPath}.`);
+    }
 
-updateVersionInJsonFile(path.join(projectRoot, "public", "manifest.json"), {
-    version: null,
-});
-updateVersionInJsonFile(path.join(projectRoot, "package.json"), {
-    version: null,
-});
-updateVersionInJsonFile(path.join(projectRoot, "package-lock.json"), {
-    version: null,
-    packages: {
-        "": {
-            version: null,
-        },
-    },
-});
+    prettierConfig.parser = "json";
+
+    return prettierConfig;
+}
 
 /**
  * @param {string} filePath
+ * @param {import("prettier").Options} prettierConfig
  * @param {ObjectParserUtilOptions} options
  */
-function updateVersionInJsonFile(filePath, options) {
+async function updateVersionInJsonFile(filePath, prettierConfig, options) {
     try {
-        const json = JSON.parse(fs.readFileSync(filePath, "utf8"));
+        const fileContents = fs.readFileSync(filePath, "utf8");
+        const json = JSON.parse(fileContents);
 
         updateVersionInObject(json, options);
 
-        fs.writeFileSync(filePath, JSON.stringify(json, null, 4));
+        const jsonString = JSON.stringify(json, null, prettierConfig.tabWidth ?? 4);
+        const formattedJsonString = await prettier.format(jsonString, prettierConfig);
+
+        fs.writeFileSync(filePath, formattedJsonString);
     } catch (e) {
-        console.error(`Error! Failed to update ${filePath} file.`);
-        process.exit(1);
+        throw new Error(`Failed to update ${filePath} file.`);
     }
 }
 
@@ -60,14 +104,11 @@ function updateVersionInJsonFile(filePath, options) {
  * @param {ObjectParserUtilOptions} options
  */
 function updateVersionInObject(object, options) {
-    for (const [key, nestedOptions] of Object.entries(options)) {
-        if (nestedOptions === null) {
-            object[key] = newVersion;
+    for (const [key, versionOrNestedOptions] of Object.entries(options)) {
+        if (typeof versionOrNestedOptions === "string") {
+            object[key] = versionOrNestedOptions;
         } else {
-            updateVersionInObject(object[key], nestedOptions);
+            updateVersionInObject(object[key], versionOrNestedOptions);
         }
     }
 }
-
-console.log(`Success! Updated version to ${newVersion}.`);
-process.exit(0);

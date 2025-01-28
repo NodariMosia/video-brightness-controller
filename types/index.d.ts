@@ -9,10 +9,6 @@ declare global {
         mediaTag: SupportedMediaTag;
         updateMediaBrightness: (brightness: number, setInputValue: boolean) => void;
     };
-
-    type ObjectParserUtilOptions = {
-        [key: string]: null | ObjectParserUtilOptions;
-    };
 }
 
 export {};
